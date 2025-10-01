@@ -3,9 +3,12 @@ import asyncio
 import discord
 import feedparser
 
-TOKEN = os.getenv("DISCORD-BOT")  # токен берём из Railway переменной
-CHANNEL_ID = 1423046960948052159  # твой ID канала Discord
+TOKEN = os.getenv("DISCORD_TOKEN")  # токен берём из Railway переменной
+CHANNEL_ID = 1423046960948052159    # твой ID канала Discord
 TIKTOK_RSS = "https://rss.app/feeds/RtLH49NY2PjfcAzR.xml"  # твой RSS фид
+
+if TOKEN is None:
+    raise ValueError("❌ Нет токена! Добавь DISCORD_TOKEN в переменные Railway.")
 
 intents = discord.Intents.default()
 client = discord.Client(intents=intents)
@@ -24,7 +27,7 @@ async def check_tiktok():
             if last_video != latest.link:
                 last_video = latest.link
                 await channel.send(f"🎥 Новый TikTok: {latest.title}\n{latest.link}")
-        await asyncio.sleep(300)  # каждые 5 минут проверка
+        await asyncio.sleep(300)
 
 @client.event
 async def on_ready():
